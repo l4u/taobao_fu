@@ -16,8 +16,8 @@ If you are using git with your Rails project, maybe you need to install them as 
 
   >> git submodule add git://github.com/adamwiggins/rest-client.git vendor/plugins/rest-client
   >> git submodule add git://github.com/jnunemaker/crack.git vendor/plugins/crack
-  >> git submoudle init
-  >> git submoudle update
+  >> git submodule init
+  >> git submodule update
   
 Recommend you use gem Patron instead of the rest-client if your Rails app is runing on a Unix/Linux/MacOSX machine. Patron is a more powerful and stable Ruby HTTP client based on libcurl. For more details about Patron, see http://github.com/toland/patron .
 
@@ -34,7 +34,7 @@ Well, assuming you have already installed rest-client(or Patron) and Crack, It's
   >> ruby script/plugin install git://github.com/404/taobao_fu.git
   >> ruby script/generate taobao # This command will create a TOP configuration file named taobao.yml under the config/ directory.
 
-It's the same as the previous operation that you can install it as a git submoudle.
+It's the same as the previous operation that you can install it as a git submodule.
 
 
 Usage

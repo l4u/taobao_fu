@@ -1,0 +1,29 @@
+development:
+  api_key: 12001516
+  secret_key: de685c1b440478770049c73c8d115d46
+  taobaoke_pid: mm_14283632_0_0
+  version: 1.0
+  format: json
+  real_time: true
+  timeout: 10
+  enable_curl: false
+
+test:
+  api_key:
+  secret_key:
+  taobaoke_pid: mm_14283632_0_0
+  version: 1.0
+  format: json
+  real_time: false
+  timeout: 10
+  enable_curl: false
+
+production:
+  api_key: 12001516
+  secret_key: de685c1b440478770049c73c8d115d46
+  taobaoke_pid: mm_14283632_0_0
+  version: 1.0
+  format: json
+  real_time: true
+  timeout: 10
+  enable_curl: true

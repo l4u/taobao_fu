@@ -15,18 +15,16 @@ module TaobaoFu
 
   SANDBOX = 'http://gw.api.tbsandbox.com/router/rest?'
   PRODBOX = 'http://gw.api.taobao.com/router/rest?'
-  USER_AGENT = 'why404-taobao_fu/1.0.0.beta3'
+  USER_AGENT = 'why404-taobao_fu/1.0.0.beta4'
   REQUEST_TIMEOUT = 10
   API_VERSION = 1.0
   OUTPUT_FORMAT = 'json'
   
   class << self
     def load(config_file)
-      if FileTest::exists?(config_file)
-        @settings = YAML.load_file(config_file)
-        @settings = @settings[RAILS_ENV] if defined? RAILS_ENV
-        apply_settings
-      end
+      @settings = YAML.load_file(config_file)
+      @settings = @settings[RAILS_ENV] if defined? RAILS_ENV
+      apply_settings
     end
     
     def apply_settings

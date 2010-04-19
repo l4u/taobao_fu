@@ -4,12 +4,12 @@ require 'rake/gempackagetask'
 PKG_FILES = FileList[
   '[a-zA-Z-]*', 
   'generators/**/*', 
-  'lib/**/*', 
+  'lib/**/*'
 ]
 
 spec = Gem::Specification.new do |s|
   s.name = "taobao_fu" 
-  s.version = "1.0.0.beta3" 
+  s.version = "1.0.0.beta4" 
   s.author = "why404" 
   s.email = "why404@gmail.com" 
   s.homepage = "http://rubygems.org/gems/taobao_fu" 
@@ -20,6 +20,7 @@ spec = Gem::Specification.new do |s|
   s.require_path = "lib" 
   s.has_rdoc = false 
   s.extra_rdoc_files = ["README.markdown"] 
+  s.add_dependency("crack", ">= 0.1.7")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

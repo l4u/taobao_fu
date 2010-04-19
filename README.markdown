@@ -1,5 +1,4 @@
-About TaobaoFu
---------------
+### About TaobaoFu
 
 **TaobaoFu** is a Rails plugin (supports Rails 3.0.0 or above) as an unofficial Ruby SDK for the Taobao Open Platform(http://open.taobao.com/).
 
@@ -11,9 +10,10 @@ TaobaoFu is developed against Ruby 1.8.6, 1.8.7, 1.9.1, 1.9.2
 
 ### Installation
 
-Get the TaobaoFu plugin from github.com: 
-
-    rails plugin install git://github.com/why404/taobao_fu.git
+Get the TaobaoFu plugin from github.com:
+ 
+    > cd your_rails_app
+    > rails plugin install git://github.com/why404/taobao_fu.git
 
 For Rails applications add the gem dependencies to your Gemfile: 
 
@@ -22,7 +22,7 @@ For Rails applications add the gem dependencies to your Gemfile:
 
 Setup of access the TOP API is handled by using automatic configuration with a config/taobao.yml. You can generate a taobao.yml via the following command: 
 
-    rails generate taobao_fu config
+    > rails generate taobao_fu config
 
 An example configuration is as follows, with the default values showing: 
 config/taobao.yml: 

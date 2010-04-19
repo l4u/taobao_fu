@@ -1,8 +1,0 @@
-Description:
-    Creates the Taobao configuration file.
-	
-Example:
-
-    ./script/generate taobao
-	
-This command will create a TOP configuration file named taobao.yml under the config/ directory.

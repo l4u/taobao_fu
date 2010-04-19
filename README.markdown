@@ -50,7 +50,7 @@ config/taobao.yml:
 
     production:
       <<: *defaults
-      is_sandbox: true
+      is_sandbox: false
       use_curl: true
 
 

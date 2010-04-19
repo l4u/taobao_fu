@@ -1,23 +1,27 @@
 require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rake/gempackagetask'
 
-desc 'Default: run unit tests.'
-task :default => :test
+PKG_FILES = FileList[
+  '[a-zA-Z-]*', 
+  'generators/**/*', 
+  'lib/**/*', 
+]
 
-desc 'Test the taobao plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+spec = Gem::Specification.new do |s|
+  s.name = "taobao_fu" 
+  s.version = "1.0.0.beta3" 
+  s.author = "why404" 
+  s.email = "why404@gmail.com" 
+  s.homepage = "http://rubygems.org/gems/taobao_fu" 
+  s.platform = Gem::Platform::RUBY 
+  s.summary = "Ruby SDK for the Taobao Open Platform" 
+  s.description = "TaobaoFu is a Ruby gem (also can be a Rails plugin, supports Rails 3.0.0 or above) as an unofficial Ruby SDK for the Taobao Open Platform(http://open.taobao.com/)."
+  s.files = PKG_FILES.to_a 
+  s.require_path = "lib" 
+  s.has_rdoc = false 
+  s.extra_rdoc_files = ["README.markdown"] 
 end
 
-desc 'Generate documentation for the taobao plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Taobao'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.gem_spec = spec
 end

@@ -1,6 +1,5 @@
 # Include hook code here
+require "taobao_fu"
 
-require 'taobao' 
-
-config_file = "#{RAILS_ROOT}/config/taobao.yml"
-Taobao.load(config_file)
+config_file = File.join(RAILS_ROOT, "config", "taobao.yml")
+TaobaoFu.load(config_file)

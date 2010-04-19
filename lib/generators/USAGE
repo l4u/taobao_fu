@@ -1,0 +1,8 @@
+Description:
+    Creates a TOP(Taobao Open Platform) configuration file at config/taobao.yml
+
+Example:
+    rails generate taobao_fu config
+
+    This will create:
+        config/taobao.yml

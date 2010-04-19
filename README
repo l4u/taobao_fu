@@ -57,10 +57,10 @@ This example used a real TOP account and ran under the production environment, s
 
   > cd your_rails_app
   > ruby script/console
-  >> Taobao.get(:method =>'taobao.item.get',
-                :nick   => 'jacky_che',
-                :iid    => '2ccea61028d6c2f0fd858945023ebe19', 
-                :fields => 'title')
+  >> Taobao.get(:method => 'taobao.item.get',
+                :nick   => 'simul官方旗舰店',
+                :iid    => '3b54462a34e2ed84c330dc3e5fb4a94f', 
+                :fields => 'title, price')
 
 
 Future
@@ -73,4 +73,4 @@ Full Chinese documentation support.
 Copyright
 =======
 
-Copyright (c) 2009 Alex Xu(404), released under the MIT license.
+Copyright (c) 2009 why404, released under the MIT license.

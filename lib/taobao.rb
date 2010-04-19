@@ -1,46 +1,62 @@
-require 'digest/md5'
-require 'uri'
+begin
+  require "crack"
+rescue LoadError
+  puts "The Crack gem is not available.\nIf you ran this command from a git checkout " \
+       "of Rails, please make sure crack is installed. \n "
+  exit
+end
+# require "patron"
+require "digest/md5"
+require "yaml"
+require "uri"
+require 'rest_client'
 
-# Taobao
 module Taobao
 
-  USER_AGENT = '404-taobao_fu/1.0b1'
-  SANDBOX = 'http://gw.sandbox.taobao.com/router/rest?'
+  SANDBOX = 'http://gw.api.tbsandbox.com/router/rest?'
   PRODBOX = 'http://gw.api.taobao.com/router/rest?'
+  USER_AGENT = 'why404-taobao_fu/0.0.1'
+  REQUEST_TIMEOUT = 10
+  API_VERSION = 1.0
+  OUTPUT_FORMAT = 'json'
   
   class << self
     def load(config_file)
-      if File.exist?(config_file)
+      if FileTest::exists?(config_file)
         @settings = YAML.load_file(config_file)
         @settings = @settings[RAILS_ENV] if defined? RAILS_ENV
-        apply(@settings)
-      else
-        Rails::logger.error "Error, missing #{config_file}. You must have #{config_file} to configure your app key that you can use the TOP SDK normally."
+        apply_settings
       end
     end
     
-    def apply(settings)
-      ENV['TAOBAO_API_KEY']    = settings['api_key'].to_s
-      ENV['TAOBAO_SECRET_KEY'] = settings['secret_key']
-      ENV['TAOBAOKE_PID']      = settings['taobaoke_pid']
-      @config_options = settings
-      initialize_connect if @config_options['enable_curl']
+    def apply_settings
+      ENV['TAOBAO_API_KEY']    = @settings['api_key'].to_s
+      ENV['TAOBAO_SECRET_KEY'] = @settings['secret_key']
+      ENV['TAOBAOKE_PID']      = @settings['taobaoke_pid']
+      @base_url                = @settings['is_sandbox'] ? SANDBOX : PRODBOX
+      
+      initialize_session if @settings['use_curl']
     end
     
-    def initialize_connect
+    def initialize_session
       @sess = Patron::Session.new
-      @sess.timeout = @config_options['timeout']
-      @sess.base_url = @config_options['real_time'] ? PRODBOX : SANDBOX
+      @sess.base_url = @base_url
       @sess.headers['User-Agent'] = USER_AGENT
+      @sess.timeout = REQUEST_TIMEOUT
+    end
+    
+    def switch_to(sandbox_or_prodbox)
+      @base_url = sandbox_or_prodbox
+      @sess.base_url = @base_url if @sess
     end
     
     def get(options = {})
       if @sess
         @response = @sess.get(generate_query_string(sorted_params(options))).body
       else
-        @response = RestClient.get(generate_url(sorted_params(options)))
+        @response = TaobaoFu::Rest.get(@base_url, generate_query_vars(sorted_params(options)))
       end
-      parse_result(@response)
+      parse_result @response
     end
     
     # http://toland.github.com/patron/
@@ -55,33 +71,31 @@ module Taobao
     
     def sorted_params(options)
       {
-        :app_key   => @config_options['api_key'],
-        :format    => @config_options['format'],
-        :v         => @config_options['version'],
-        :timestamp => Time.now.to_s(:db)
-      }.merge!(options).sort_by { |k,v| k.to_s }
+        :app_key   => @settings['app_key'],
+        :format    => OUTPUT_FORMAT,
+        :v         => API_VERSION,
+        :timestamp => Time.now.strftime("%Y-%m-%d %H:%M:%S")
+      }.merge!(options)
     end
     
-    def generate_url(params)
-      (@config_options['real_time'] ? PRODBOX : SANDBOX) + generate_query_string(params)
+    def generate_query_vars(params)
+      params[:sign] = generate_sign(params.sort_by { |k,v| k.to_s }.flatten.join)
+      params
     end
     
     def generate_query_string(params)
-      total_param = params.map { |key, value| key.to_s+"="+value.to_s } + ["sign=#{generate_sign(params)}"]
+      params_array = params.sort_by { |k,v| k.to_s }
+      sign_token = generate_sign(params_array.flatten.join)
+      total_param = params_array.map { |key, value| key.to_s+"="+value.to_s } + ["sign=#{sign_token}"]
       URI.escape(total_param.join("&"))
     end
     
-    def generate_sign(params)
-      Digest::MD5.hexdigest(@config_options['secret_key'] + params.to_s).upcase
+    def generate_sign(param_string)
+      Digest::MD5.hexdigest(@settings['secret_key'] + param_string).upcase
     end
     
-    def parse_result(result)
-      case @config_options['format']
-      when 'xml'
-        Crack::XML.parse(result)['rsp'] || Crack::XML.parse(result)['error_rsp']
-      when 'json'
-        Crack::JSON.parse(result)['rsp'] || Crack::JSON.parse(result)['error_rsp']
-      end
+    def parse_result(data)
+      Crack::JSON.parse(data)['rsp'] || Crack::JSON.parse(data)['error_rsp']
     end
     
   end

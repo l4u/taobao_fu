@@ -15,6 +15,13 @@ Get the TaobaoFu plugin from github.com:
     > cd your_rails_app
     > rails plugin install git://github.com/why404/taobao_fu.git
 
+Or you can install it as a git submodule(recommend):
+
+    > cd your_rails_app
+    > git submodule add git://github.com/why404/taobao_fu.git vendor/plugins/taobao_fu
+    > git submodule init
+    > git submodule update
+
 For Rails applications add the gem dependencies to your Gemfile: 
 
     gem "crack"     # Required

@@ -15,9 +15,10 @@ module TaobaoFu
 
   SANDBOX = 'http://gw.api.tbsandbox.com/router/rest?'
   PRODBOX = 'http://gw.api.taobao.com/router/rest?'
-  USER_AGENT = 'why404-taobao_fu/1.0.0.beta4'
+  USER_AGENT = 'why404-taobao_fu/1.0.0.beta5'
   REQUEST_TIMEOUT = 10
-  API_VERSION = 1.0
+  API_VERSION = 2.0
+  SIGN_ALGORITHM = 'md5'
   OUTPUT_FORMAT = 'json'
   
   class << self
@@ -28,7 +29,7 @@ module TaobaoFu
     end
     
     def apply_settings
-      ENV['TAOBAO_API_KEY']    = @settings['api_key'].to_s
+      ENV['TAOBAO_API_KEY']    = @settings['app_key'].to_s
       ENV['TAOBAO_SECRET_KEY'] = @settings['secret_key']
       ENV['TAOBAOKE_PID']      = @settings['taobaoke_pid']
       @base_url                = @settings['is_sandbox'] ? SANDBOX : PRODBOX
@@ -69,17 +70,18 @@ module TaobaoFu
     
     def sorted_params(options)
       {
-        :app_key   => @settings['app_key'],
-        :format    => OUTPUT_FORMAT,
-        :v         => API_VERSION,
-        :timestamp => Time.now.strftime("%Y-%m-%d %H:%M:%S")
+        :app_key     => @settings['app_key'],
+        :format      => OUTPUT_FORMAT,
+        :v           => API_VERSION,
+        :sign_method => SIGN_ALGORITHM,
+        :timestamp   => Time.now.strftime("%Y-%m-%d %H:%M:%S")
       }.merge!(options)
     end
     
     def generate_query_vars(params)
       params[:sign] = generate_sign(params.sort_by { |k,v| k.to_s }.flatten.join)
       params
-    end    
+    end
     
     def generate_query_string(params)
       params_array = params.sort_by { |k,v| k.to_s }
@@ -89,11 +91,11 @@ module TaobaoFu
     end
     
     def generate_sign(param_string)
-      Digest::MD5.hexdigest(@settings['secret_key'] + param_string).upcase
+      Digest::MD5.hexdigest(@settings['secret_key'] + param_string + @settings['secret_key']).upcase
     end
     
     def parse_result(data)
-      Crack::JSON.parse(data)['rsp'] || Crack::JSON.parse(data)['error_rsp']
+      Crack::JSON.parse(data)
     end
     
   end

@@ -15,7 +15,7 @@ Get the TaobaoFu plugin from github.com:
     > cd your_rails_app
     > rails plugin install git://github.com/why404/taobao_fu.git
 
-Or you can install it as a git submodule(recommend):
+Or you can install it as a git submodule(Recommended):
 
     > cd your_rails_app
     > git submodule add git://github.com/why404/taobao_fu.git vendor/plugins/taobao_fu
@@ -80,6 +80,6 @@ There is also an additional method is using for switching between sandbox and pr
     TaobaoFu.switch_to(TaobaoFu::PRODBOX) # back to production environment(taobao.com)
 
 
-### License
+### Copyright
 
 Copyright (c) 2010 why404(why404#gmail), released under the MIT license.

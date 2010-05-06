@@ -9,7 +9,7 @@ PKG_FILES = FileList[
 
 spec = Gem::Specification.new do |s|
   s.name = "taobao_fu" 
-  s.version = "1.0.0.beta4" 
+  s.version = "1.0.0.beta5" 
   s.author = "why404" 
   s.email = "why404@gmail.com" 
   s.homepage = "http://rubygems.org/gems/taobao_fu" 

@@ -1,5 +1,5 @@
 require 'rake'
-require 'rake/gempackagetask'
+require "rubygems/package_task"
 
 PKG_FILES = FileList[
   '[a-zA-Z-]*', 
@@ -9,7 +9,7 @@ PKG_FILES = FileList[
 
 spec = Gem::Specification.new do |s|
   s.name = "taobao_fu" 
-  s.version = "1.0.0.beta5" 
+  s.version = "1.0.0.beta6" 
   s.author = "why404" 
   s.email = "why404@gmail.com" 
   s.homepage = "http://rubygems.org/gems/taobao_fu" 
@@ -23,6 +23,6 @@ spec = Gem::Specification.new do |s|
   s.add_dependency("crack", ">= 0.1.7")
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.gem_spec = spec
+Gem::PackageTask.new(spec) do |pkg|
+    pkg.gem_spec = spec
 end
